@@ -18,7 +18,8 @@ app.use(express.json({ limit: "100mb" }));
 // app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://budget-frontend-five.vercel.app",
+    // origin: "http://localhost:3000",
     credentials: true,
   })
 );
