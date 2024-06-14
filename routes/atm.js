@@ -11,6 +11,7 @@ const {
   getTotalAtmAmount,
   withdrawMoney,
   addAtmAmount,
+  atmCount,
 } = require("../controllers/atmController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -24,5 +25,6 @@ router.delete("/atm/:id", isAuthenticatedUser, deleteAtmEntry);
 router.post("/atm/withdraw", isAuthenticatedUser, withdrawMoney);
 
 router.get("/total-atm", isAuthenticatedUser, getTotalAtmAmount);
+router.get("/atm-count", isAuthenticatedUser, atmCount);
 
 module.exports = router;

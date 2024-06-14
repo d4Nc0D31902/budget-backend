@@ -126,3 +126,14 @@ exports.getTotalCashAmount = async (req, res, next) => {
     next(error);
   }
 };
+
+//CASH Count
+exports.cashCount = async (req, res) => {
+  try {
+    const count = await Cash.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

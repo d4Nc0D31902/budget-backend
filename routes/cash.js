@@ -10,6 +10,7 @@ const {
   deleteCashEntry,
   getTotalCashAmount,
   addAmount,
+  cashCount,
 } = require("../controllers/cashController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -20,6 +21,7 @@ router.put("/cash/add/:id", isAuthenticatedUser, addAmount);
 router.get("/cash/:id", isAuthenticatedUser, getSingleCashEntry);
 router.put("/cash/:id", isAuthenticatedUser, updateCashEntry);
 router.delete("/cash/:id", isAuthenticatedUser, deleteCashEntry);
+router.get("/cash-count", isAuthenticatedUser, cashCount);
 
 router.get("/total-cash", isAuthenticatedUser, getTotalCashAmount);
 

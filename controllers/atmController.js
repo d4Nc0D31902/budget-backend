@@ -184,3 +184,15 @@ exports.addAtmAmount = async (req, res, next) => {
     next(error);
   }
 };
+
+
+//ATM Count
+exports.atmCount = async (req, res) => {
+  try {
+    const count = await Atm.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
