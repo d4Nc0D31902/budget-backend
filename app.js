@@ -12,6 +12,7 @@ const income = require("./routes/income");
 const expenses = require("./routes/expenses");
 const savings = require("./routes/savings");
 const transaction = require("./routes/transaction");
+const category = require("./routes/category");
 
 const errorMiddleware = require("./middlewares/errors");
 app.use(express.json({ limit: "100mb" }));
@@ -35,6 +36,7 @@ app.use("/api/v1", income);
 app.use("/api/v1", expenses);
 app.use("/api/v1", transaction);
 app.use("/api/v1", savings);
+app.use("/api/v1", category);
 
 app.use(errorMiddleware);
 module.exports = app;
