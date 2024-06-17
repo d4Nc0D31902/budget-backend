@@ -13,14 +13,15 @@ const expenses = require("./routes/expenses");
 const savings = require("./routes/savings");
 const transaction = require("./routes/transaction");
 const category = require("./routes/category");
+const budget = require("./routes/budget");
 
 const errorMiddleware = require("./middlewares/errors");
 app.use(express.json({ limit: "100mb" }));
 // app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: "https://budget-frontend-five.vercel.app",
-    // origin: "http://localhost:3000",
+    origin: process.env.BACKEND_ORIGIN,
+    // origin: process.env.LOCAL_URL,
     credentials: true,
   })
 );
@@ -37,6 +38,7 @@ app.use("/api/v1", expenses);
 app.use("/api/v1", transaction);
 app.use("/api/v1", savings);
 app.use("/api/v1", category);
+app.use("/api/v1", budget);
 
 app.use(errorMiddleware);
 module.exports = app;

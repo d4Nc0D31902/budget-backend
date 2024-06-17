@@ -1,14 +1,8 @@
 /node_modules/
-
-
-
-# production
-/frontend/build
-
-# misc
+/frontend/build/
 /backend/config/config.env
 
-
+# misc
 *.env
 npm-debug.log*
 yarn-debug.log*
