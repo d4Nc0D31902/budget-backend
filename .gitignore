@@ -1,6 +1,6 @@
-/node_modules/
-/frontend/build/
-/backend/config/config.env
+node_modules
+frontend/build
+backend/config/.env
 
 # misc
 *.env

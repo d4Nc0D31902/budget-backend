@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+require("dotenv").config({ path: "./config/.env" });
 
 const products = require("./routes/product");
 const auth = require("./routes/auth");
@@ -20,8 +21,9 @@ app.use(express.json({ limit: "100mb" }));
 // app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: process.env.BACKEND_ORIGIN,
-    // origin: process.env.LOCAL_URL,
+    // origin: process.env.BACKEND_ORIGIN,
+    origin: process.env.LOCAL_URL,
+    // origin: "http://localhost:3000",
     credentials: true,
   })
 );
