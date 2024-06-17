@@ -167,7 +167,7 @@ exports.addAtmAmount = async (req, res, next) => {
     await atmEntry.save();
 
     const incomeData = {
-      description: "Added Cash",
+      description: "Amount Added to Card",
       amount: amountToAdd,
       date: new Date(),
       userId: req.user._id,
