@@ -116,27 +116,21 @@ exports.withdrawMoney = async (req, res, next) => {
     const amountToWithdraw = req.body.amount;
     const userId = req.user.id;
 
-    // Ensure the amount to withdraw is valid
     if (amountToWithdraw <= 0) {
       return next(new ErrorHandler("Invalid withdrawal amount", 400));
     }
-
-    // Find the user's ATM entry
-    const atmEntry = await Atm.findOne({ user: userId });
+    const atmEntry = await Atm.findOne({ userId });
 
     if (!atmEntry || atmEntry.amount < amountToWithdraw) {
       return next(new ErrorHandler("Insufficient funds", 400));
     }
 
-    // Deduct the amount from the ATM entry
     atmEntry.amount -= amountToWithdraw;
     await atmEntry.save();
 
-    // Find the user's cash entry
-    let cashEntry = await Cash.findOne({ user: userId });
+    let cashEntry = await Cash.findOne({ userId });
 
     if (!cashEntry) {
-      // If no cash entry exists, create one
       const cashData = {
         description: "ATM Withdrawal",
         amount: amountToWithdraw,
@@ -145,7 +139,6 @@ exports.withdrawMoney = async (req, res, next) => {
       };
       cashEntry = await Cash.create(cashData);
     } else {
-      // If a cash entry exists, update it
       cashEntry.amount += amountToWithdraw;
       await cashEntry.save();
     }
