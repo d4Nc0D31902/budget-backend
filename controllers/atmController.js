@@ -135,7 +135,7 @@ exports.withdrawMoney = async (req, res, next) => {
         description: "ATM Withdrawal",
         amount: amountToWithdraw,
         date: new Date(),
-        user: userId,
+        userId: userId,
       };
       cashEntry = await Cash.create(cashData);
     } else {
