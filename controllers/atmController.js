@@ -93,7 +93,8 @@ exports.deleteAtmEntry = async (req, res, next) => {
 
 exports.getTotalAtmAmount = async (req, res, next) => {
   try {
-    const atmEntries = await Atm.find();
+    const userId = req.user.id;
+    const atmEntries = await Atm.find(userId);
     let totalAtm = 0;
     atmEntries.forEach((entry) => {
       totalAtm += entry.amount;

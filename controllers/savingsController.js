@@ -77,7 +77,7 @@ exports.deleteSavingsEntry = async (req, res, next) => {
 exports.getTotalSavings = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const savingsEntries = await Savings.find({ user: userId });
+    const savingsEntries = await Savings.find({ userId });
 
     const totalSavings = savingsEntries.reduce(
       (total, entry) => total + entry.amount,

@@ -77,7 +77,7 @@ exports.deleteIncomeEntry = async (req, res, next) => {
 exports.getTotalIncome = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const incomeEntries = await Income.find({ user: userId });
+    const incomeEntries = await Income.find({ userId });
 
     // Calculate total income
     const totalIncome = incomeEntries.reduce(
@@ -95,7 +95,7 @@ exports.getTotalIncome = async (req, res, next) => {
 };
 
 exports.incomePerMonth = async (req, res, next) => {
-  const userId = req.user._id; 
+  const userId = req.user._id;
   const incomePerMonth = await Income.aggregate([
     {
       $match: {
