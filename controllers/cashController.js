@@ -43,6 +43,7 @@ exports.addAmount = async (req, res, next) => {
     const incomeData = {
       description: "Added Cash",
       amount: amountToAdd,
+      userId: req.user._id,
       date: new Date(),
     };
     const income = await Income.create(incomeData);
@@ -134,8 +135,8 @@ exports.getTotalCashAmount = async (req, res, next) => {
 //CASH Count
 exports.cashCount = async (req, res) => {
   try {
-    const userId = req.user.id; 
-    const count = await Cash.countDocuments({userId});
+    const userId = req.user.id;
+    const count = await Cash.countDocuments({ userId });
     res.json({ count });
   } catch (error) {
     console.error(error);

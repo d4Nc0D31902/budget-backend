@@ -96,15 +96,19 @@ exports.deleteTransaction = async (req, res, next) => {
 exports.transaction = async (req, res, next) => {
   try {
     const currentDate = new Date();
+    const userId = req.user.id;
 
     const { account, amount, notes, category } = req.body;
     const transactionData = {
+      userId,
       account,
       amount,
       notes,
       date: currentDate,
       category,
     };
+
+    console.log("Transaction:", transactionData);
     const transaction = await Transaction.create(transactionData);
 
     if (account === "On Hand") {
@@ -125,10 +129,20 @@ exports.transaction = async (req, res, next) => {
 
     let entry;
     if (category === "Expenses") {
-      const expensesData = { description: notes, amount, date: currentDate };
+      const expensesData = {
+        description: notes,
+        amount,
+        date: currentDate,
+        userId,
+      };
       entry = await Expenses.create(expensesData);
     } else if (category === "Savings") {
-      const savingsData = { description: notes, amount, date: currentDate };
+      const savingsData = {
+        description: notes,
+        amount,
+        date: currentDate,
+        userId,
+      };
       entry = await Savings.create(savingsData);
     } else {
       return next(new ErrorHandler("Invalid category", 400));

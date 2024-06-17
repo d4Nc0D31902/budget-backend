@@ -93,7 +93,7 @@ exports.deleteAtmEntry = async (req, res, next) => {
 
 exports.getTotalAtmAmount = async (req, res, next) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     const atmEntries = await Atm.find({ userId });
 
     let totalAtm = 0;
@@ -164,6 +164,7 @@ exports.withdrawMoney = async (req, res, next) => {
 exports.addAtmAmount = async (req, res, next) => {
   try {
     const atmEntry = await Atm.findById(req.params.id);
+    const userId = req.user._id;
     if (!atmEntry) {
       return next(new ErrorHandler("Cash entry not found", 404));
     }
@@ -176,7 +177,10 @@ exports.addAtmAmount = async (req, res, next) => {
       description: "Added Cash",
       amount: amountToAdd,
       date: new Date(),
+      userId: req.user._id,
     };
+
+    console.log("Income:", incomeData);
     const income = await Income.create(incomeData);
 
     res.status(200).json({
@@ -193,8 +197,8 @@ exports.addAtmAmount = async (req, res, next) => {
 //ATM Count
 exports.atmCount = async (req, res) => {
   try {
-    const userId = req.user.id; 
-    const count = await Atm.countDocuments({userId});
+    const userId = req.user.id;
+    const count = await Atm.countDocuments({ userId });
     res.json({ count });
   } catch (error) {
     console.error(error);
