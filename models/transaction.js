@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
   account: {
     type: String,
     required: true,

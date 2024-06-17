@@ -18,13 +18,15 @@ exports.newAtmEntry = async (req, res, next) => {
   try {
     req.body.date = new Date();
     req.body.description = "Card";
-
+    req.body.userId = req.user._id;
+    
     const atm = await Atm.create(req.body);
 
     const incomeData = {
       description: "ATM",
       amount: req.body.amount,
       date: req.body.date,
+      userId: req.user._id,
     };
     const income = await Income.create(incomeData);
 
@@ -40,7 +42,7 @@ exports.newAtmEntry = async (req, res, next) => {
 
 exports.getAdminAtmEntries = async (req, res, next) => {
   const userId = req.user.id;
-  const atmEntries = await Atm.find({ user: userId });
+  const atmEntries = await Atm.find({ userId });
   res.status(200).json({
     success: true,
     atmEntries,
@@ -184,7 +186,6 @@ exports.addAtmAmount = async (req, res, next) => {
     next(error);
   }
 };
-
 
 //ATM Count
 exports.atmCount = async (req, res) => {

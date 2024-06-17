@@ -7,6 +7,7 @@ const cloudinary = require("cloudinary");
 // Create new expenses entry
 exports.newExpensesEntry = async (req, res, next) => {
   req.body.date = new Date();
+  req.body.userId = req.user._id;
   const expenses = await Expenses.create(req.body);
 
   res.status(201).json({
@@ -18,7 +19,7 @@ exports.newExpensesEntry = async (req, res, next) => {
 exports.getAdminExpensesEntries = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const expensesEntries = await Expenses.find({ user: userId });
+    const expensesEntries = await Expenses.find({ userId });
 
     res.status(200).json({
       success: true,
@@ -79,7 +80,7 @@ exports.deleteExpensesEntry = async (req, res, next) => {
 exports.getTotalExpenses = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const expensesEntries = await Expenses.find({ user: userId });
+    const expensesEntries = await Expenses.find({ userId });
 
     // Calculate total expenses
     const totalExpenses = expensesEntries.reduce(
@@ -96,8 +97,72 @@ exports.getTotalExpenses = async (req, res, next) => {
   }
 };
 
+// exports.expensesPerMonth = async (req, res, next) => {
+//   const expensesPerMonth = await Expenses.aggregate([
+//     {
+//       $group: {
+//         _id: { year: { $year: "$date" }, month: { $month: "$date" } },
+//         total: { $sum: "$amount" },
+//       },
+//     },
+//     {
+//       $addFields: {
+//         month: {
+//           $let: {
+//             vars: {
+//               monthsInString: [
+//                 ,
+//                 "Jan",
+//                 "Feb",
+//                 "Mar",
+//                 "Apr",
+//                 "May",
+//                 "Jun",
+//                 "Jul",
+//                 "Aug",
+//                 "Sept",
+//                 "Oct",
+//                 "Nov",
+//                 "Dec",
+//               ],
+//             },
+//             in: {
+//               $arrayElemAt: ["$$monthsInString", "$_id.month"],
+//             },
+//           },
+//         },
+//       },
+//     },
+//     { $sort: { "_id.year": 1, "_id.month": 1 } },
+//     {
+//       $project: {
+//         _id: 0,
+//         year: "$_id.year",
+//         month: 1,
+//         total: 1,
+//       },
+//     },
+//   ]);
+
+//   if (!expensesPerMonth) {
+//     return next(new ErrorHandler("Error calculating expenses per month", 404));
+//   }
+
+//   res.status(200).json({
+//     success: true,
+//     expensesPerMonth,
+//   });
+// };
+
 exports.expensesPerMonth = async (req, res, next) => {
+  const userId = req.user._id; 
+
   const expensesPerMonth = await Expenses.aggregate([
+    {
+      $match: {
+        userId: userId,
+      },
+    },
     {
       $group: {
         _id: { year: { $year: "$date" }, month: { $month: "$date" } },

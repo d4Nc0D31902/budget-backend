@@ -1,9 +1,10 @@
-const Savings = require("../models/savings"); 
+const Savings = require("../models/savings");
 const ErrorHandler = require("../utils/errorHandler");
 
 // Create new savings entry
 exports.newSavingsEntry = async (req, res, next) => {
   req.body.date = new Date();
+  req.body.userId = req.user._id;
   const savings = await Savings.create(req.body);
 
   res.status(201).json({
@@ -15,7 +16,7 @@ exports.newSavingsEntry = async (req, res, next) => {
 exports.getAdminSavingsEntries = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const savingsEntries = await Savings.find({ user: userId });
+    const savingsEntries = await Savings.find({ userId });
 
     res.status(200).json({
       success: true,

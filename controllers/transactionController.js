@@ -8,7 +8,13 @@ const Savings = require("../models/savings");
 // Create a new transaction
 exports.newTransaction = async (req, res, next) => {
   try {
-    const transaction = await Transaction.create(req.body);
+    const transactionData = {
+      ...req.body,
+      user: req.user._id,
+    };
+
+    const transaction = await Transaction.create(transactionData);
+
     res.status(201).json({
       success: true,
       transaction,

@@ -4,6 +4,7 @@ const ErrorHandler = require("../utils/errorHandler");
 // Create new category entry
 exports.newCategory = async (req, res, next) => {
   req.body.date = new Date();
+  req.body.userId = req.user._id;
   const category = await Category.create(req.body);
 
   res.status(201).json({
@@ -15,7 +16,7 @@ exports.newCategory = async (req, res, next) => {
 exports.getAdminCategory = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const categories = await Category.find({ user: userId });
+    const categories = await Category.find({ userId });
 
     res.status(200).json({
       success: true,

@@ -2,21 +2,37 @@ const Budget = require("../models/budget");
 const ErrorHandler = require("../utils/errorHandler");
 
 exports.newBudget = async (req, res, next) => {
-  const budget = await Budget.create(req.body);
-
-  res.status(201).json({
-    success: true,
-    budget,
-  });
+  try {
+    const budgetData = {
+      ...req.body,
+      userId: req.user._id,
+    };
+    const budget = await Budget.create(budgetData);
+    res.status(201).json({
+      success: true,
+      budget,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      error: "Server Error",
+    });
+  }
 };
 
 exports.getAdminBudgets = async (req, res, next) => {
-  const userId = req.user.id;
-  const budgets = await Budget.find({ user: userId });
-  res.status(200).json({
-    success: true,
-    budgets,
-  });
+  try {
+    const userId = req.user.id; 
+    const budgets = await Budget.find({ userId });
+
+    res.status(200).json({
+      success: true,
+      budgets,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getSingleBudget = async (req, res, next) => {

@@ -7,12 +7,15 @@ exports.newCashEntry = async (req, res, next) => {
   try {
     req.body.date = new Date();
     req.body.description = "Cash";
+    req.body.userId = req.user._id;
+
     const cash = await Cash.create(req.body);
 
     const incomeData = {
       description: "On Hand",
       amount: req.body.amount,
       date: req.body.date,
+      userId: req.user._id,
     };
     const income = await Income.create(incomeData);
 
@@ -58,7 +61,7 @@ exports.addAmount = async (req, res, next) => {
 exports.getAdminCashEntries = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const cashEntries = await Cash.find({ user: userId });
+    const cashEntries = await Cash.find({ userId });
 
     res.status(200).json({
       success: true,

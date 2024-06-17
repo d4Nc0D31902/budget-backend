@@ -3,10 +3,12 @@ const Order = require("../models/order");
 const APIFeatures = require("../utils/apiFeatures");
 const ErrorHandler = require("../utils/errorHandler");
 const cloudinary = require("cloudinary");
+const { ObjectId } = require("mongoose").Types;
 
 // Create new income entry
 exports.newIncomeEntry = async (req, res, next) => {
   req.body.date = new Date();
+  req.body.userId = req.user._id;
   const income = await Income.create(req.body);
 
   res.status(201).json({
@@ -18,7 +20,7 @@ exports.newIncomeEntry = async (req, res, next) => {
 exports.getAdminIncomeEntries = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const incomeEntries = await Income.find({ user: userId });
+    const incomeEntries = await Income.find({ userId });
 
     res.status(200).json({
       success: true,
@@ -93,7 +95,13 @@ exports.getTotalIncome = async (req, res, next) => {
 };
 
 exports.incomePerMonth = async (req, res, next) => {
+  const userId = req.user._id; 
   const incomePerMonth = await Income.aggregate([
+    {
+      $match: {
+        userId: userId,
+      },
+    },
     {
       $group: {
         _id: { year: { $year: "$date" }, month: { $month: "$date" } },
