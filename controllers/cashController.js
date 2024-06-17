@@ -134,7 +134,8 @@ exports.getTotalCashAmount = async (req, res, next) => {
 //CASH Count
 exports.cashCount = async (req, res) => {
   try {
-    const count = await Cash.countDocuments();
+    const userId = req.user.id; 
+    const count = await Cash.countDocuments({userId});
     res.json({ count });
   } catch (error) {
     console.error(error);

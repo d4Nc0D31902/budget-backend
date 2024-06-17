@@ -93,12 +93,9 @@ exports.deleteAtmEntry = async (req, res, next) => {
 
 exports.getTotalAtmAmount = async (req, res, next) => {
   try {
-    const userId = req.user.id; // Fetching user ID from authenticated request
-
-    // Fetch ATM entries where userId matches the logged-in user's ID
+    const userId = req.user.id; 
     const atmEntries = await Atm.find({ userId });
 
-    // Calculate total amount
     let totalAtm = 0;
     atmEntries.forEach((entry) => {
       totalAtm += entry.amount;
@@ -196,7 +193,8 @@ exports.addAtmAmount = async (req, res, next) => {
 //ATM Count
 exports.atmCount = async (req, res) => {
   try {
-    const count = await Atm.countDocuments();
+    const userId = req.user.id; 
+    const count = await Atm.countDocuments({userId});
     res.json({ count });
   } catch (error) {
     console.error(error);
