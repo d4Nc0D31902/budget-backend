@@ -112,14 +112,15 @@ exports.transaction = async (req, res, next) => {
     const transaction = await Transaction.create(transactionData);
 
     if (account === "On Hand") {
-      const cash = await Cash.findOne();
+      const userId = req.user._id;
+      const cash = await Cash.findOne({ userId });
       if (!cash) {
         return next(new ErrorHandler("Cash balance not found", 404));
       }
       cash.amount -= amount;
       await cash.save();
     } else if (account === "ATM") {
-      const atm = await ATM.findOne();
+      const atm = await ATM.findOne({ userId });
       if (!atm) {
         return next(new ErrorHandler("ATM balance not found", 404));
       }
