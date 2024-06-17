@@ -21,9 +21,8 @@ app.use(express.json({ limit: "100mb" }));
 // app.set("trust proxy", 1);
 app.use(
   cors({
-    // origin: process.env.BACKEND_ORIGIN,
-    origin: process.env.LOCAL_URL,
-    // origin: "http://localhost:3000",
+    origin: process.env.BACKEND_ORIGIN,
+    // origin: process.env.LOCAL_URL,
     credentials: true,
   })
 );
