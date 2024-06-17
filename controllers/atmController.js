@@ -19,7 +19,7 @@ exports.newAtmEntry = async (req, res, next) => {
     req.body.date = new Date();
     req.body.description = "Card";
     req.body.userId = req.user._id;
-    
+
     const atm = await Atm.create(req.body);
 
     const incomeData = {
@@ -93,12 +93,17 @@ exports.deleteAtmEntry = async (req, res, next) => {
 
 exports.getTotalAtmAmount = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    const atmEntries = await Atm.find(userId);
+    const userId = req.user.id; // Fetching user ID from authenticated request
+
+    // Fetch ATM entries where userId matches the logged-in user's ID
+    const atmEntries = await Atm.find({ userId });
+
+    // Calculate total amount
     let totalAtm = 0;
     atmEntries.forEach((entry) => {
       totalAtm += entry.amount;
     });
+
     res.status(200).json({
       success: true,
       totalAtm,

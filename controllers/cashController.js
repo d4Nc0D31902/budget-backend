@@ -117,7 +117,7 @@ exports.deleteCashEntry = async (req, res, next) => {
 exports.getTotalCashAmount = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const cashEntries = await Cash.find(userId);
+    const cashEntries = await Cash.find({ userId });
     let totalAmount = 0;
     cashEntries.forEach((entry) => {
       totalAmount += entry.amount;
